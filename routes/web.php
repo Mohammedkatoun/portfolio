@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+// AboutController usage removed; revert to legacy view for /about
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 

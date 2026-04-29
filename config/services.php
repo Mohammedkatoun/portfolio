@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'github' => [
+        'username' => env('GITHUB_USERNAME', 'Mohammedkatoun'),
+        // Optional: set a fine-grained PAT to avoid rate limits.
+        'token' => env('GITHUB_TOKEN'),
+        // Set to false only for local dev if your cURL CA bundle isn't configured.
+        'verify_ssl' => env('GITHUB_VERIFY_SSL', true),
+    ],
+
 ];

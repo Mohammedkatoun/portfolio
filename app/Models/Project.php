@@ -2,17 +2,31 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Schema;
 
 class Project extends Model
 {
-    use SoftDeletes;
+    use HasFactory;
+
+    protected $table = 'projects';
+
+    protected $casts = [
+        'technologies' => 'array',
+        'published' => 'boolean',
+        'order' => 'integer',
+        'github_id' => 'integer',
+        'stargazers_count' => 'integer',
+        'forks_count' => 'integer',
+    ];
 
     protected $fillable = [
         'user_id',
         'title',
+        'github_id',
+        'name',
+        'html_url',
         'description',
         'long_description',
         'image',
@@ -20,22 +34,27 @@ class Project extends Model
         'live_url',
         'technologies',
         'status',
-        'order'
+        'order',
+        'language',
+        'stargazers_count',
+        'forks_count',
     ];
 
-    protected $casts = [
-        'technologies' => 'array',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
-    public function user(): BelongsTo
+    /**
+     * Accessors for GitHub data display.
+     */
+    public function getTitleAttribute(): string
     {
-        return $this->belongsTo(User::class);
+        return $this->name ?? $this->title ?? 'Untitled Project';
     }
 
+    /** Local scope to optionally filter published projects. */
     public function scopePublished($query)
     {
-        return $query->where('status', 'completed')->orderBy('order');
+        $table = $query->getModel()->getTable();
+        if (Schema::hasColumn($table, 'published')) {
+            return $query->where('published', true);
+        }
+        return $query;
     }
 }

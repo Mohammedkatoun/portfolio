@@ -94,6 +94,20 @@
 
                     <p class="mt-3 text-sm leading-6 text-white/65">{{ \Illuminate\Support\Str::limit($project->description, 140) }}</p>
 
+                    @if($project->language || $project->stargazers_count || $project->forks_count)
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            @if($project->language)
+                                <span class="chip"><i class="fas fa-code"></i> {{ $project->language }}</span>
+                            @endif
+                            @if($project->stargazers_count)
+                                <span class="chip"><i class="fas fa-star text-amber-300"></i> {{ number_format($project->stargazers_count) }}</span>
+                            @endif
+                            @if($project->forks_count)
+                                <span class="chip"><i class="fas fa-code-branch"></i> {{ number_format($project->forks_count) }}</span>
+                            @endif
+                        </div>
+                    @endif
+
                     @if(is_array($project->technologies) && count($project->technologies))
                         <div class="mt-4 flex flex-wrap gap-2">
                             @foreach(array_slice($project->technologies, 0, 6) as $tech)
@@ -105,8 +119,9 @@
                     @endif
 
                     <div class="mt-5 grid grid-cols-2 gap-2">
-                        @if($project->github_url)
-                            <a href="{{ $project->github_url }}" class="btn btn-ghost" target="_blank" rel="noreferrer">
+                        @php($repoUrl = $project->github_url ?: $project->html_url)
+                        @if($repoUrl)
+                            <a href="{{ $repoUrl }}" class="btn btn-ghost" target="_blank" rel="noreferrer">
                                 <i class="fab fa-github"></i> GitHub
                             </a>
                         @else

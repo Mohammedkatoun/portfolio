@@ -13,18 +13,26 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('title');
-            $table->text('description');
-            $table->text('long_description')->nullable();
+
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+            $table->string('title')->nullable();
+            $table->text('description')->nullable();
+            $table->longText('long_description')->nullable();
             $table->string('image')->nullable();
             $table->string('github_url')->nullable();
             $table->string('live_url')->nullable();
+
             $table->json('technologies')->nullable();
+
             $table->string('status')->default('completed');
-            $table->integer('order')->default(0);
+            $table->boolean('published')->default(true);
+            $table->integer('order')->default(0)->index();
+
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

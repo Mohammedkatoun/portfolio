@@ -34,6 +34,15 @@
                         @endif
                     </span>
                     <span class="chip"><i class="fas fa-calendar"></i> {{ $project->created_at?->format('M Y') }}</span>
+                    @if($project->language)
+                        <span class="chip"><i class="fas fa-code"></i> {{ $project->language }}</span>
+                    @endif
+                    @if($project->stargazers_count)
+                        <span class="chip"><i class="fas fa-star text-amber-300"></i> {{ number_format($project->stargazers_count) }}</span>
+                    @endif
+                    @if($project->forks_count)
+                        <span class="chip"><i class="fas fa-code-branch"></i> {{ number_format($project->forks_count) }}</span>
+                    @endif
                 </div>
 
                 @if(is_array($project->technologies) && count($project->technologies))
@@ -50,8 +59,9 @@
             <aside class="card w-full p-6 lg:w-[360px]">
                 <h2 class="text-sm font-semibold tracking-wide text-white/90">Links</h2>
                 <div class="mt-4 grid gap-2">
-                    @if($project->github_url)
-                        <a href="{{ $project->github_url }}" class="btn btn-ghost w-full" target="_blank" rel="noreferrer">
+                    @php($repoUrl = $project->github_url ?: $project->html_url)
+                    @if($repoUrl)
+                        <a href="{{ $repoUrl }}" class="btn btn-ghost w-full" target="_blank" rel="noreferrer">
                             <i class="fab fa-github"></i> GitHub repository
                         </a>
                     @endif
